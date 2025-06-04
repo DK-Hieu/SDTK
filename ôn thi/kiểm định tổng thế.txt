@@ -75,3 +75,32 @@ colnames(tbl) <- c("G1", "G2", "G3")
 
 cat("\nChi-squared test tỷ lệ nhiều nhóm:\n")
 print(chisq.test(tbl))
+
+===========Kiểm định phương sai bằng nhau =======================
+Số nhóm	Kiểm định	Hàm R	Yêu cầu phân phối chuẩn
+2	F-test	var.test()	Có
+≥2	Bartlett test	bartlett.test()	Có
+≥2	Levene test	leveneTest()	Không bắt buộc
+
+
+==============Phương sai không bằng nhau ======================
+x <- rnorm(30, mean = 100, sd = 10)
+y <- rnorm(30, mean = 105, sd = 20)
+
+# Welch t-test (mặc định)
+t.test(x, y)  # var.equal = FALSE mặc định
+
+Kiểm định phi tham số
+
+# 2 nhóm - Mann-Whitney
+wilcox.test(x, y)
+
+# ≥ 3 nhóm - Kruskal-Wallis
+kruskal.test(value ~ group, data = data)
+
+| Tình huống                    | Giải pháp                    | Hàm R                            |
+| ----------------------------- | ---------------------------- | -------------------------------- |
+| 2 nhóm, trung bình            | Welch t-test                 | `t.test(..., var.equal = FALSE)` |
+| ≥3 nhóm, trung bình           | Welch ANOVA                  | `oneway.test()`                  |
+| Dữ liệu không chuẩn (2 nhóm)  | Phi tham số – Mann–Whitney   | `wilcox.test()`                  |
+| Dữ liệu không chuẩn (≥3 nhóm) | Phi tham số – Kruskal–Wallis | `kruskal.test()`                 |
